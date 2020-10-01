@@ -2,7 +2,7 @@
 
 Source code for a site that used to show statistical analysis of M+ in WoW.
 
-For a simpler version of the same idea, see https://github.com/alcaras/mplus-analysis
+For a simpler version of the same idea, you can refer this link https://github.com/alcaras/mplus-analysis
 
 This code is what the site is currently running.
 
