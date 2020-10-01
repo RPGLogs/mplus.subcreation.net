@@ -1,5 +1,6 @@
 # mplus.subcreation.net
-
+overview
+this website only for education purpose
 Source code for a site that used to show statistical analysis of M+ in WoW.
 
 For a simpler version of the same idea, see https://github.com/alcaras/mplus-analysis
