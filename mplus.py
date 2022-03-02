@@ -39,14 +39,14 @@ from models import SpecRankings, SpecRankingsRaid, CovenantStats, RaidCounts, Du
 from auth import api_key
 from wcl import wcl_specs
 from wcl_shadowlands import dungeon_encounters
-from wcl_shadowlands import sanctum_of_domination_encounters as raid_encounters
+from wcl_shadowlands import sepulcher_encounters as raid_encounters
 
 from enchants import enchant_mapping
 
 
-from sanctum_of_domination import sanctum_of_domination_canonical_order as raid_canonical_order
-from sanctum_of_domination import sanctum_of_domination_short_names as raid_short_names
-from sanctum_of_domination import sanctum_of_domination_ignore as raid_ignore
+from sepulcher import sep_canonical_order as raid_canonical_order
+from sepulcher import sep_short_names as raid_short_names
+from sepulcher import sep_ignore as raid_ignore
 
 # cloudflare cache handling
 from auth import cloudflare_api_key, cloudflare_zone
