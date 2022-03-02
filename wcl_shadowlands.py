@@ -19,3 +19,15 @@ sanctum_of_domination_encounters["Guardian of the First Ones"] = 2436
 sanctum_of_domination_encounters["Fatescribe Roh-Kalo"] = 2431
 sanctum_of_domination_encounters["Kel'Thuzad"] = 2422
 sanctum_of_domination_encounters["Sylvanas Windrunner"] = 2435
+
+sepulcher_encounters["Vigilant Guardian"] = 2512
+sepulcher_encounters["Skolex, the Insatiable Ravener"] = 2542
+sepulcher_encounters["Artificer Xy'mox"] = 2553
+sepulcher_encounters["Dausegne, the Fallen Oracle"] = 2540
+sepulcher_encounters["Prototype Pantheon"] = 2544
+sepulcher_encounters["Lihuvim, Principal Architect"] = 2539
+sepulcher_encounters["Halondrus the Reclaimer"] = 2529
+sepulcher_encounters["Anduin Wrynn"] = 2546
+sepulcher_encounters["Lords of Dread"] = 2543
+sepulcher_encounters["Rygelon"] = 2549
+sepulcher_encounters["The Jailer"] = 2537
