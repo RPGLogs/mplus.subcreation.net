@@ -7,6 +7,8 @@ dungeon_encounters["Sanguine Depths"] = 12284
 dungeon_encounters["Spires of Ascension"] = 12285
 dungeon_encounters["The Necrotic Wake"] = 12286
 dungeon_encounters["Theater of Pain"] = 12293
+dungeon_encounters["Tazavesh: Streets of Wonder"] = 12441
+dungeon_encounters["So'leah's Gambit"] = 12442
 
 sanctum_of_domination_encounters = {}
 sanctum_of_domination_encounters["Tarragrue"] = 2423
