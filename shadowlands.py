@@ -7,7 +7,9 @@ dungeons = ["De Other Side",
             "Plaguefall",
             "Sanguine Depths",
             "Spires of Ascension",
-            "Theater of Pain"]
+            "Theater of Pain",
+            "Tazavesh: Streets of Wonder",
+            "Tazavesh: So'leah's Gambit"]
 
 dungeon_short_names = {}
 dungeon_short_names["De Other Side"] = "DOS"
@@ -18,6 +20,8 @@ dungeon_short_names["Sanguine Depths"] = "SD"
 dungeon_short_names["Spires of Ascension"] = "SOA"
 dungeon_short_names["The Necrotic Wake"] = "NW"
 dungeon_short_names["Theater of Pain"] = "TOP"
+dungeon_short_names["Tazavesh: Streets of Wonder"] = "STRT"
+dungeon_short_names["Tazavesh: So'leah's Gambit"] = "GMBT"
 
 dungeon_slugs = []
 for d in dungeons:
