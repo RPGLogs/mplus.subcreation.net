@@ -4,7 +4,7 @@
 <div class="col-xl-6 col-lg-6 py-2">
   <h2>{{ns}} Tier List</h2>
     <p>
-      <b class="affixes">{% if encounter=="all" %}All Bosses except Tarragrue{% else %}<img src="images/bosses/sanctum/{{encounter_slug}}.jpg" width="20" height="20"> {{encounter}}{% endif %}</b><br/>
+      <b class="affixes">{% if encounter=="all" %}All Bosses{% else %}<img src="images/bosses/sepulcher/{{encounter_slug}}.jpg" width="20" height="20"> {{encounter}}{% endif %}</b><br/>
       <i>Based <b>solely</b> on <b>{%if ns=="Healer"%}hps{%else%}dps{%endif%}</b> from {{role_stats["n"]}} <b>{{difficulty}}</b> parses. More details in the <a href="https://subcreation.net/faq.html#raid">FAQ</a>.</i>
       {%if ns=="Healer" or ns=="Tank"%}<br><i>Take this with <b>a huge grain of salt</b> for {{ns}}s <b>as it is only considering {%if ns=="Healer"%}hps{%else%}dps{%endif%}</b> and nothing else.</b></i>{%endif%}
     </p>

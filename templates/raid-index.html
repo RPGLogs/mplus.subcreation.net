@@ -31,7 +31,7 @@
   
           <div class="boss-box {{ ' active' if encounter == "all" else '' }}">
             <a class="boss-link" href="{{prefix}}index{% if difficulty == "Heroic" %}-heroic{%endif%}.html">
-              <img src="images/bosses/sanctum/sanctum.jpg" width="51" height="51" alt="All Bosses" title="All Bosses"><br/>All Bosses
+              <img src="images/bosses/sepulcher/sepulcher.jpg" width="51" height="51" alt="All Bosses" title="All Bosses"><br/>All Bosses
             </a>
           </div>
         </li>
@@ -39,7 +39,7 @@
 {% for e in raid_canonical_order %}
           <div class="boss-box {{ ' active' if encounter_slugs[e] in encounter_slug else '' }}">
             <a class="boss-link" href="{{prefix}}{{encounter_slugs[e]}}{% if difficulty == "Heroic" %}-heroic{%endif%}.html">
-              <img src="images/bosses/sanctum/{{encounter_slugs[e]}}.jpg" width="51" height="51" alt="{{e}}" title="{{e}}"><br/>
+              <img src="images/bosses/sepulcher/{{encounter_slugs[e]}}.jpg" width="51" height="51" alt="{{e}}" title="{{e}}"><br/>
              {{raid_short_names[e]}}
             </a>
           </div>
