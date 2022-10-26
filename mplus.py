@@ -132,6 +132,7 @@ def get_raid_ignore(active_raid):
 # on wed refresh fated and previously fated (to update navigation)
 # this will not work in 2023, but fated should be on all raids by then which will need another update anyway
 def determine_fated_raid(current_time=None):
+    return known_raids
     if current_time == None:
         current_time = pytz.utc.localize(datetime.datetime.now()).astimezone(pytz.timezone("America/New_York"))
     # Monday 0, Tuesday 1, Wednesday 2, Thursday 3, Friday 4, Saturday 5, Sunday 6
@@ -160,6 +161,7 @@ def determine_fated_raid(current_time=None):
     return current_fated_raid
 
 def determine_raids_to_update(current_time=None):
+    return known_raids
     if current_time == None:
         current_time = pytz.utc.localize(datetime.datetime.now()).astimezone(pytz.timezone("America/New_York"))
     # Monday 0, Tuesday 1, Wednesday 2, Thursday 3, Friday 4, Saturday 5, Sunday 6
@@ -201,6 +203,7 @@ def determine_raids_to_update(current_time=None):
 
 
 def determine_raids_to_generate(current_time=None):
+    return known_raids
     if current_time == None:
         current_time = pytz.utc.localize(datetime.datetime.now()).astimezone(pytz.timezone("America/New_York"))
 
