@@ -2,19 +2,19 @@
   <div class="d-flex justify-content-center flex-wrap">
     <a class="raid-link-{%if active_raid!=""%}in{%endif%}active" href="{{prefix}}{% if spec_slug=="" %}nathria{% else %}{{spec_slug}}{%endif%}{% if difficulty == "Heroic" %}-heroic{%endif%}.html">
       <div class="px-3 fated nathria {%if active_raid!="nathria"%}in{%endif%}active">
-        {% if fated_raid == "nathria" %}<img class="fated-icon" src="images/modes/fated.png" width="20" height="20" />{% endif %}
+        {% if "nathria" in fated_raid %}<img class="fated-icon" src="images/modes/fated.png" width="20" height="20" />{% endif %}
           Castle Nathria
         </div>
       </a>
     <a class="raid-link-{%if active_raid!="sanctum"%}in{%endif%}active" href="{{prefix}}{% if spec_slug=="" %}sanctum{% else %}sanctum-{{spec_slug}}{%endif%}{% if difficulty == "Heroic" %}-heroic{%endif%}.html">
       <div class="px-3 fated sanctum {%if active_raid!="sanctum"%}in{%endif%}active">
-       {% if fated_raid == "sanctum" %}<img class="fated-icon" src="images/modes/fated.png" width="20" height="20" />{% endif %}
+       {% if "sanctum" in fated_raid %}<img class="fated-icon" src="images/modes/fated.png" width="20" height="20" />{% endif %}
         Sanctum
       </div>
     </a>
     <a class="raid-link-{%if active_raid!="sepulcher"%}in{%endif%}active" href="{{prefix}}{% if spec_slug=="" %}sepulcher{% else %}sepulcher-{{spec_slug}}{%endif%}{% if difficulty == "Heroic" %}-heroic{%endif%}.html">
       <div class="px-3 fated sepulcher {%if active_raid!="sepulcher"%}in{%endif%}active">
-       {% if fated_raid == "sepulcher" %}<img class="fated-icon" src="images/modes/fated.png" width="20" height="20" />{% endif %}
+       {% if "sepulcher" in fated_raid %}<img class="fated-icon" src="images/modes/fated.png" width="20" height="20" />{% endif %}
           Sepulcher
         </div>          
     </a>
