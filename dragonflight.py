@@ -1,23 +1,23 @@
 import slugify
 
-dungeons = ["Brackenhide Hollow",
-            "Freehold",
-            "Halls of Infusion",
-            "Neltharion's Lair",
-            "Neltharus",
-            "The Underrot",
-            "The Vortex Pinnacle",
-            "Uldaman: Legacy of Tyr"]            
+dungeons = ["Atal'Dazar",
+            "Black Rook Hold",
+            "DOTI: Galakrond's Fall",
+            "DOTI: Murozond's Rise",
+            "Darkheart Thicket",
+            "Everbloom",
+            "Throne of the Tides",
+            "Waycrest Manor"]            
 
 dungeon_short_names = {}
-dungeon_short_names["Brackenhide Hollow"] = "BH"
-dungeon_short_names["Freehold"] = "FH"
-dungeon_short_names["Halls of Infusion"] = "HOI"
-dungeon_short_names["Neltharion's Lair"] = "NL"
-dungeon_short_names["Neltharus"] = "NELT"
-dungeon_short_names["The Underrot"] = "UNDR"
-dungeon_short_names["The Vortex Pinnacle"] = "VP"
-dungeon_short_names["Uldaman: Legacy of Tyr"] = "ULD"
+dungeon_short_names["Atal'Dazar"] = "AD"
+dungeon_short_names["Black Rook Hold"] = "BRH"
+dungeon_short_names["DOTI: Galakrond's Fall"] = "FALL"
+dungeon_short_names["DOTI: Murozond's Rise"] = "RISE"
+dungeon_short_names["Darkheart Thicket"] = "DHT"
+dungeon_short_names["Everbloom"] = "EB"
+dungeon_short_names["Throne of the Tides"] = "TOT"
+dungeon_short_names["Waycrest Manor"] = "WM"
 
 dungeon_slugs = []
 for d in dungeons:
