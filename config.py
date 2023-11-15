@@ -6,7 +6,7 @@ RIO_MAX_PAGE = 25
 # need to update in templates/stats_table.html
 # need to update in templates/compositions.html
 # need to update in templates/navbar.html
-RIO_SEASON = "season-df-2" 
+RIO_SEASON = "season-df-3" 
 
 # used for m+
 # this is a season partition, so usually this is 1
@@ -14,10 +14,10 @@ RIO_SEASON = "season-df-2"
 WCL_SEASON = 1
 
 # used for raid
-WCL_PARTITION = 4
+WCL_PARTITION = 1
 
 # config
-RAID_NAME = "Aberrus, the Shadowed Crucible"
+RAID_NAME = "Amirdrassil, the Dream's Hope"
 
 # for heroic week, set this to 10
 # after that in the season, set this at 16

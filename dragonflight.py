@@ -1,23 +1,23 @@
 import slugify
 
-dungeons = ["Brackenhide Hollow",
-            "Freehold",
-            "Halls of Infusion",
-            "Neltharion's Lair",
-            "Neltharus",
-            "The Underrot",
-            "The Vortex Pinnacle",
-            "Uldaman: Legacy of Tyr"]            
+dungeons = ["Atal'Dazar",
+            "Black Rook Hold",
+            "DOTI: Galakrond's Fall",
+            "DOTI: Murozond's Rise",
+            "Darkheart Thicket",
+            "The Everbloom",
+            "Throne of the Tides",
+            "Waycrest Manor"]            
 
 dungeon_short_names = {}
-dungeon_short_names["Brackenhide Hollow"] = "BH"
-dungeon_short_names["Freehold"] = "FH"
-dungeon_short_names["Halls of Infusion"] = "HOI"
-dungeon_short_names["Neltharion's Lair"] = "NL"
-dungeon_short_names["Neltharus"] = "NELT"
-dungeon_short_names["The Underrot"] = "UNDR"
-dungeon_short_names["The Vortex Pinnacle"] = "VP"
-dungeon_short_names["Uldaman: Legacy of Tyr"] = "ULD"
+dungeon_short_names["Atal'Dazar"] = "AD"
+dungeon_short_names["Black Rook Hold"] = "BRH"
+dungeon_short_names["Darkheart Thicket"] = "DHT"
+dungeon_short_names["DOTI: Galakrond's Fall"] = "FALL"
+dungeon_short_names["DOTI: Murozond's Rise"] = "RISE"
+dungeon_short_names["The Everbloom"] = "EB"
+dungeon_short_names["Throne of the Tides"] = "TOT"
+dungeon_short_names["Waycrest Manor"] = "WM"
 
 dungeon_slugs = []
 for d in dungeons:
@@ -57,6 +57,20 @@ tier_items = [ ### aberrus tier
              200396, 200398, 200399, 200400, 200401, # shaman
              200335, 200336, 200337, 200333, 200338, # warlock
              200423, 200425, 200426, 200427, 200428, # warrior
+             ### amirdrassil tier
+             207198, 207199, 207200, 207201, 207203, # dk
+             207261, 207262, 207263, 207264, 207266, # dh
+             207252, 207253, 207254, 207255, 207257, # druid
+             207225, 207226, 207227, 207228, 207230, # evoker
+             207216, 207217, 207218, 207219, 207221, # hunter
+             207288, 207289, 207290, 207291, 207293, # mage
+             207243, 207244, 207245, 207246, 207248, # monk
+             207189, 207190, 207191, 207192, 207194, # paladin
+             207279, 207280, 207281, 207282, 207284, # priest  
+             207234, 207235, 207236, 207237, 207239, # rogue
+             207207, 207208, 207209, 207210, 207212, # shaman
+             207270, 207271, 207272, 207273, 207275, # warlock
+             207180, 207181, 207182, 207183, 207185, # warrior
             ]
 
 embellished_items = [

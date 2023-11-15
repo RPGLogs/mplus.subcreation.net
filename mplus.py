@@ -82,30 +82,30 @@ from config import latest_patch_tw
 last_updated = None
 
 ## raid rotation
-known_raids = ["aberrus"]
-from wcl_dragonflight import aberrus_encounters
-from aberrus import aberrus_canonical_order, aberrus_short_names, aberrus_ignore
+known_raids = ["amirdrassil"]
+from wcl_dragonflight import amirdrassil_encounters
+from amirdrassil import amirdrassil_canonical_order, amirdrassil_short_names, amirdrassil_ignore
 
 def get_raid_encounters(active_raid):
-    return aberrus_encounters
+    return amirdrassil_encounters
 
 def get_raid_canonical_order(active_raid):
-    return aberrus_canonical_order  
+    return amirdrassil_canonical_order  
 
 def get_raid_short_names(active_raid):
-    return aberrus_short_names
+    return amirdrassil_short_names
 
 def get_raid_ignore(active_raid):
-    return aberrus_ignore
+    return amirdrassil_ignore
 
 # rotate updating raids every day
 def determine_raids_to_update(current_time=None):        
-    raids_to_update = ["aberrus"]
+    raids_to_update = ["amirdrassil"]
     return raids_to_update
 
 # rotate updating raids every day
 def determine_raids_to_generate(current_time=None):
-    raids_to_update = ["aberrus"]
+    raids_to_update = ["amirdrassil"]
     return raids_to_update
 
 ## raider.io handling
@@ -3559,8 +3559,8 @@ def test_raid_view(destination):
         if slugify.slugify(unicode(s)) in destination:
             spec = s
 
-    active_raid = "aberrus"
-    raid_canonical_order = aberrus_canonical_order
+    active_raid = "amirdrassil"
+    raid_canonical_order = amirdrassil_canonical_order
                     
     for e in raid_canonical_order:
         if slugify.slugify(unicode(e)) in destination:
@@ -4056,7 +4056,7 @@ class TestWCLGetRankingsRaid(webapp2.RequestHandler):
 #        update_wcl_raid_update_subset(["Feral Druid"], active_raid="vault")
 #        update_wcl_raid_update_subset(["Shadow Priest"], active_raid="vault")
 #        update_wcl_raid_update_subset(["Demonology Warlock"], active_raid="aberrus")
-        update_wcl_raid_update_subset(["Augmentation Evoker"], active_raid="aberrus")
+        update_wcl_raid_update_subset(["Augmentation Evoker"], active_raid="amirdrassil")
 #        update_wcl_raid_update_subset(["Outlaw Rogue"], active_raid="vault")                                
 
 class WCLGenHTML(webapp2.RequestHandler):
