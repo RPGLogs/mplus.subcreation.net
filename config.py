@@ -35,8 +35,8 @@ import datetime
 # do not change the times, just year, month, date
 
 # tuesday
-latest_patch_us = datetime.datetime(2023, 9, 5, 16, 0) #0 date
-latest_patch_eu = datetime.datetime(2023, 9, 6, 4, 0)  #+1 date
+latest_patch_us = datetime.datetime(2023, 11, 14, 16, 0) #0 date
+latest_patch_eu = datetime.datetime(2023, 11, 15, 4, 0)  #+1 date
 # wednesday
-latest_patch_tw = datetime.datetime(2023, 9, 6, 23, 0) #+1 date
-latest_patch_kr = datetime.datetime(2023, 9, 6, 23, 0) #+1 date
+latest_patch_tw = datetime.datetime(2023, 11, 15, 23, 0) #+1 date
+latest_patch_kr = datetime.datetime(2023, 11, 15, 23, 0) #+1 date
