@@ -150,7 +150,10 @@ enchant_collapse = \
     '6827': '6827',
     '6828': '6830',
     '6829': '6830',
-    '6830': '6830'}
+    '6830': '6830',
+    '7001': '7003',
+    '7002': '7003',
+    '7003': '7003'}
 
 # Leg armor
 enchant_mapping["6488"] = {"id": 193557, "name": "Fierce Armor Kit", "quality": 1}
@@ -316,6 +319,9 @@ enchant_mapping["6824"] = {"id": 204615, "name": "Spore Tender", "quality": 3}
 enchant_mapping["6825"] = {"id": 204621, "name": "Shadowflame Wreathe", "quality": 1}
 enchant_mapping["6826"] = {"id": 204622, "name": "Shadowflame Wreathe", "quality": 2}
 enchant_mapping["6827"] = {"id": 204623, "name": "Shadowflame Wreathe", "quality": 3}
+enchant_mapping["7001"] = {"id": 207085, "name": "Dreaming Devotion", "quality": 1}
+enchant_mapping["7002"] = {"id": 207086, "name": "Dreaming Devotion", "quality": 2}
+enchant_mapping["7003"] = {"id": 207087, "name": "Dreaming Devotion", "quality": 3}
 # -----------------------------------------
 # Death Knight Runeforging -- (note this is spell id, since there's no scroll)
 enchant_mapping["3368"] = {"spell_id" : 53344, "name" : "Fallen Crusader"}
@@ -329,6 +335,12 @@ enchant_mapping["6245"] = {"spell_id" : 327082, "name" : "Apocalypse"}
 
 # -----------------------------------------
 # LEGACY
+
+# SL Enchants (why?)
+enchant_mapping["6203"] = {"id": 172411, "name": "Fortified Avoidance"}
+enchant_mapping["6229"] = {"id": 172366, "name": "Celestial Guidance"}
+enchant_mapping["6230"] = {"id": 177962, "name": "Eternal Stats"}
+
 # Battle for Azeroth Engineering
 ## Eng. Belt Enhancements -- note this is by SPELL ID, since there's no item
 enchant_mapping["5953"] = {"spell_id": 255940,  "name": "Personal Space Amplifier"}
