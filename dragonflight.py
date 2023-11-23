@@ -5,7 +5,7 @@ dungeons = ["Atal'Dazar",
             "DOTI: Galakrond's Fall",
             "DOTI: Murozond's Rise",
             "Darkheart Thicket",
-            "Everbloom",
+            "The Everbloom",
             "Throne of the Tides",
             "Waycrest Manor"]            
 
@@ -15,7 +15,7 @@ dungeon_short_names["Black Rook Hold"] = "BRH"
 dungeon_short_names["Darkheart Thicket"] = "DHT"
 dungeon_short_names["DOTI: Galakrond's Fall"] = "FALL"
 dungeon_short_names["DOTI: Murozond's Rise"] = "RISE"
-dungeon_short_names["Everbloom"] = "EB"
+dungeon_short_names["The Everbloom"] = "EB"
 dungeon_short_names["Throne of the Tides"] = "TOT"
 dungeon_short_names["Waycrest Manor"] = "WM"
 
