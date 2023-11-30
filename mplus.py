@@ -12,7 +12,6 @@ from google.appengine.api import app_identity
 from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
 from google.appengine.ext import deferred
-from google.appengine.api.taskqueue import TaskRetryOptions
 from google.appengine.runtime import DeadlineExceededError
 
 from google.appengine.ext import vendor
@@ -219,9 +218,8 @@ def update_dungeon_affix_region(dungeon, affixes, region, season=RIO_SEASON, pag
             dar.put()
     except DeadlineExceededError:
         logging.exception('deadline exception fetching url: %s', req_url)
-        options = TaskRetryOptions(task_retry_limit=1)
         deferred.defer(update_dungeon_affix_region, dungeon, affixes,
-                       region, season, page, _retry_options=options)
+                       region, season, page)
 
     except urlfetch.Error:
         logging.exception('caught exception fetching url: %s', req_url)
@@ -232,13 +230,11 @@ def update_current():
     for region in REGIONS:
         for dungeon in DUNGEONS:
             for page in range(0, RIO_MAX_PAGE):
-                options = TaskRetryOptions(task_retry_limit=1)
                 deferred.defer(update_dungeon_affix_region,
                                dungeon,
                                "current",
                                region,
-                               page=page,
-                               _retry_options=options)
+                               page=page)
 
 
 ## end raider.io processing
@@ -1249,9 +1245,7 @@ def process_raid_generate_counts_spec_encounter(spec, encounter, difficulty=MAX_
 
 def process_generate_raid_counts_for_raids(raids):
     for r in raids:
-        options = TaskRetryOptions(task_retry_limit = 1)        
-        deferred.defer(process_generate_raid_counts, active_raid=r,
-                       _retry_options=options)
+        deferred.defer(process_generate_raid_counts, active_raid=r)
         
 def process_generate_raid_counts(active_raid=""):
     difficulties = ["Heroic"]
@@ -1261,9 +1255,7 @@ def process_generate_raid_counts(active_raid=""):
         for s in specs:
             raid_encounters = get_raid_encounters(active_raid)
             for k, v in raid_encounters.iteritems():
-                options = TaskRetryOptions(task_retry_limit = 1)        
-                deferred.defer(process_raid_generate_counts_spec_encounter, s, k, d, active_raid=active_raid,
-                               _retry_options=options)
+                deferred.defer(process_raid_generate_counts_spec_encounter, s, k, d, active_raid=active_raid)
 
 def raid_generate_counts_spec_encounter(spec, encounter, difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     # read from the db
@@ -2469,8 +2461,7 @@ def api_affixes_dungeons(affixes):
 # process the overall tier lists
 def process_dungeon_ease_tier_lists_for_all_known_affixes():
     for af in known_affixes():
-        options = TaskRetryOptions(task_retry_limit = 1)        
-        deferred.defer(api_affixes_dungeons, af, _retry_options=options)
+        deferred.defer(api_affixes_dungeons, af)
         
 
 # read from the db to return the overall tier lists
@@ -3170,7 +3161,6 @@ def render_and_write_compositions(af):
 
     affix_slug = slugify.slugify(unicode(af))
 
-    options = TaskRetryOptions(task_retry_limit = 1)
     write_to_storage("compositions-" + filename_slug + ".html", rendered)
 
 
@@ -3179,7 +3169,6 @@ def render_and_write_stats(af):
     
     filename_slug = slugify.slugify(unicode(af))
 
-    options = TaskRetryOptions(task_retry_limit = 1)
     write_to_storage("stats-" + filename_slug + ".html", rendered)
 
 def render_and_write_raid_stats(encounter, difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
@@ -3202,22 +3191,15 @@ def write_overviews():
     affixes_to_write += known_affixes()
 
     for af in affixes_to_write:
-        options = TaskRetryOptions(task_retry_limit = 1)        
-        deferred.defer(render_and_write, af,
-                       _retry_options=options)
+        deferred.defer(render_and_write, af)
 
     for af in affixes_to_write:
-        options = TaskRetryOptions(task_retry_limit = 1)        
-        deferred.defer(render_and_write_compositions, af,
-                       _retry_options=options)
+        deferred.defer(render_and_write_compositions, af)
 
     for af in affixes_to_write:
-        options = TaskRetryOptions(task_retry_limit = 1)        
-        deferred.defer(render_and_write_stats, af,
-                       _retry_options=options)
+        deferred.defer(render_and_write_stats, af)
 
-    options = TaskRetryOptions(task_retry_limit = 1)
-    deferred.defer(write_apis, _retry_options=options)    
+    deferred.defer(write_apis)
 
 
 def create_spec_overview(s, d="all"):
@@ -3228,9 +3210,7 @@ def create_spec_overview(s, d="all"):
     else:
         dungeon_slug = slugify.slugify(unicode(d))
         filename = "%s-%s.html" % (spec_slug, dungeon_slug)
-    options = TaskRetryOptions(task_retry_limit = 1)        
-    deferred.defer(write_to_storage, filename, rendered,
-                       _retry_options=options)
+    deferred.defer(write_to_storage, filename, rendered)
 
 
 def create_pvp_pages():
@@ -3241,13 +3221,11 @@ def create_pvp_pages():
     
     for mode in modes_to_generate:
         rendered = render_pvp_index(mode)
-        options = TaskRetryOptions(task_retry_limit = 1)
         filename = "%s.html" % mode
         if mode == "all":
             filename = "index.html"
 
-        deferred.defer(pvp_write_to_storage, filename, rendered,
-                       _retry_options=options)
+        deferred.defer(pvp_write_to_storage, filename, rendered)
 
     write_pvp_stats()
     write_pvp_apis()
@@ -3261,11 +3239,9 @@ def write_pvp_stats():
     
     for mode in modes_to_generate:
         rendered = render_pvp_stats(mode)
-        options = TaskRetryOptions(task_retry_limit = 1)
         filename = "pvp-stats-%s.html" % mode
 
-        deferred.defer(pvp_write_to_storage, filename, rendered,
-                       _retry_options=options)    
+        deferred.defer(pvp_write_to_storage, filename, rendered)
     
 def write_pvp_apis():
     global pvp_modes
@@ -3275,9 +3251,8 @@ def write_pvp_apis():
     
     for mode in modes_to_generate:
         rendered = api_pvp_specs(mode)
-        options = TaskRetryOptions(task_retry_limit = 1)
         filename = mode
-        deferred.defer(write_api_json, "api/v0/pvp/" + filename, rendered, _retry_options=options)    
+        deferred.defer(write_api_json, "api/v0/pvp/" + filename, rendered)
 
 
 def write_api_json(filename, rendered):
@@ -3291,9 +3266,7 @@ def create_main_pages():
 
     for (filename, render_function) in main_pages:
         rendered = render_function()
-        options = TaskRetryOptions(task_retry_limit = 1)        
-        deferred.defer(main_write_to_storage, filename, rendered,
-                       _retry_options=options)                        
+        deferred.defer(main_write_to_storage, filename, rendered)
     
 def create_static_pages():
     static_pages = [["privacy.html", render_privacy],
@@ -3301,9 +3274,7 @@ def create_static_pages():
 
     for (filename, render_function) in static_pages:
         rendered = render_function()
-        options = TaskRetryOptions(task_retry_limit = 1)        
-        deferred.defer(main_write_to_storage, filename, rendered,
-                       _retry_options=options) 
+        deferred.defer(main_write_to_storage, filename, rendered)
     
 def create_raid_index(difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     rendered = render_raid_index(difficulty=difficulty, active_raid=active_raid)
@@ -3311,18 +3282,15 @@ def create_raid_index(difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     if difficulty == "Heroic":
         filename = active_raid + "-heroic.html"
 
-    options = TaskRetryOptions(task_retry_limit = 1)        
     raid_write_to_storage(filename, rendered)
 
     # also write as index 
     if difficulty == MAX_RAID_DIFFICULTY:
         filename = "index.html"
-        options = TaskRetryOptions(task_retry_limit = 1)        
         raid_write_to_storage(filename, rendered)
 
     # if it's heroic week then heroic is also the index
     if MAX_RAID_DIFFICULTY == "Heroic":
-        options = TaskRetryOptions(task_retry_limit = 1)        
         raid_write_to_storage("index.html", rendered)
 
     encounters_to_write = []
@@ -3338,15 +3306,12 @@ def create_raid_index(difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
         if difficulty == "Heroic":
             filename += "-heroic"
         filename += ".html"
-        options = TaskRetryOptions(task_retry_limit = 1)        
         raid_write_to_storage(filename, rendered)
 
     # make sure to include all in stats
     encounters_to_write += ["all"]
     for encounter in encounters_to_write:
-        options = TaskRetryOptions(task_retry_limit = 1)
-        deferred.defer(render_and_write_raid_stats, encounter, difficulty, active_raid=active_raid,
-                       _retry_options=options)        
+        deferred.defer(render_and_write_raid_stats, encounter, difficulty, active_raid=active_raid)
     
 def create_raid_spec_overview(s, e="all", difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     spec_slug = slugify.slugify(unicode(s))
@@ -3363,25 +3328,19 @@ def create_raid_spec_overview(s, e="all", difficulty=MAX_RAID_DIFFICULTY, active
     # special handling for heroic week -- write both files
     if MAX_RAID_DIFFICULTY == "Heroic":
         filename = filename_slug + ".html"
-        options = TaskRetryOptions(task_retry_limit = 1)        
         raid_write_to_storage(filename, rendered)
     
     if difficulty == "Heroic":
         filename_slug += "-heroic"
     filename = filename_slug + ".html"
-    options = TaskRetryOptions(task_retry_limit = 1)        
     raid_write_to_storage(filename, rendered)
 
 def write_spec_overviews():
     for s in specs:
-        options = TaskRetryOptions(task_retry_limit = 1)        
-        deferred.defer(create_spec_overview, s, "all",
-                       _retry_options=options)
+        deferred.defer(create_spec_overview, s, "all")
 
         for k, v in dungeon_encounters.iteritems():
-            options = TaskRetryOptions(task_retry_limit = 1)        
-            deferred.defer(create_spec_overview, s, k,
-                           _retry_options=options)
+            deferred.defer(create_spec_overview, s, k)
 
 
 def write_api_dungeon_ease():
@@ -3409,15 +3368,13 @@ def write_api_affix_tier_list():
                           content_type="application/json")        
             
 def write_apis():
-    options = TaskRetryOptions(task_retry_limit = 1)    
-    deferred.defer(write_api_dungeon_ease, _retry_options=options)
-    deferred.defer(write_api_dungeon_specs, _retry_options=options)
-    deferred.defer(write_api_affix_tier_list, _retry_options=options)
+    deferred.defer(write_api_dungeon_ease)
+    deferred.defer(write_api_dungeon_specs)
+    deferred.defer(write_api_affix_tier_list)
 
-    deferred.defer(process_dungeon_ease_tier_lists_for_all_known_affixes,
-                   _retry_options=options)
+    deferred.defer(process_dungeon_ease_tier_lists_for_all_known_affixes)
 
-    deferred.defer(write_api_dungeon_ease_overall, _retry_options=options)
+    deferred.defer(write_api_dungeon_ease_overall)
 
 
 def write_raid_spec_overviews(active_raid=""):
@@ -3429,22 +3386,16 @@ def write_raid_spec_overviews(active_raid=""):
     if MAX_RAID_DIFFICULTY == "Mythic":
         difficulties = ["Mythic", "Heroic"]
     
-    options = TaskRetryOptions(task_retry_limit = 1)
     for d in difficulties:
-        deferred.defer(create_raid_index, d, active_raid=active_raid,
-                       _retry_options=options)   
+        deferred.defer(create_raid_index, d, active_raid=active_raid)
 
     for s in specs:
         for d in difficulties:
-            options = TaskRetryOptions(task_retry_limit = 1)        
-            deferred.defer(create_raid_spec_overview, s, "all", d, active_raid=active_raid,
-                           _retry_options=options)
+            deferred.defer(create_raid_spec_overview, s, "all", d, active_raid=active_raid)
 
             raid_encounters = get_raid_encounters(active_raid)
             for k, v in raid_encounters.iteritems():
-                options = TaskRetryOptions(task_retry_limit = 1)        
-                deferred.defer(create_raid_spec_overview, s, k, d, active_raid=active_raid,
-                           _retry_options=options)
+                deferred.defer(create_raid_spec_overview, s, k, d, active_raid=active_raid)
 
 
 ## end cloud storage
@@ -3773,9 +3724,7 @@ def update_wcl_raid_rankings(spec, encounter, page=1, difficulty=MAX_RAID_DIFFIC
             # queue up all pages for normal
             i = 1
             while (i <= 5):
-                options = TaskRetryOptions(task_retry_limit = 1)
-                deferred.defer(update_wcl_raid_rankings, spec, encounter, page=i, difficulty="Normal", active_raid=active_raid,
-                               _retry_options=options)
+                deferred.defer(update_wcl_raid_rankings, spec, encounter, page=i, difficulty="Normal", active_raid=active_raid)
                 i += 1
             return True
         return False # otherwise fail
@@ -3840,9 +3789,7 @@ def update_wcl_spec(spec):
     for k, v in dungeon_encounters.iteritems():
         i = 1
         while (i <= 5):
-            options = TaskRetryOptions(task_retry_limit = 1)            
-            deferred.defer(update_wcl_rankings, spec, k, page=i,
-                           _retry_options=options)
+            deferred.defer(update_wcl_rankings, spec, k, page=i)
             i += 1
 
     return spec, spec_key,  wcl_specs[spec]
@@ -3852,14 +3799,12 @@ def update_wcl_spec(spec):
 # get the data for dungeons
 def update_wcl_update():
     for i, s in enumerate(specs):
-        options = TaskRetryOptions(task_retry_limit = 1)
-        deferred.defer(update_wcl_spec, s, _retry_options=options)
+        deferred.defer(update_wcl_spec, s)
 
 
 def update_wcl_update_subset(subset):
     for i, s in enumerate(subset):
-        options = TaskRetryOptions(task_retry_limit = 1)
-        deferred.defer(update_wcl_spec, s, _retry_options=options)
+        deferred.defer(update_wcl_spec, s)
         
 
 def update_wcl_raid_spec(spec, difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
@@ -3873,10 +3818,8 @@ def update_wcl_raid_spec(spec, difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     for k, v in raid_encounters.iteritems():
         i = 1
         while (i <= 5):
-            options = TaskRetryOptions(task_retry_limit = 1)
             deferred.defer(update_wcl_raid_rankings, spec, k, page=i, difficulty=difficulty,
-                           active_raid=active_raid,
-                           _retry_options=options)
+                           active_raid=active_raid)
             i += 1
 
     return spec, spec_key,  wcl_specs[spec]
@@ -3889,8 +3832,7 @@ def update_wcl_raid_update(active_raid=""):
     
     for i, s in enumerate(specs):
         for d in difficulties:
-            options = TaskRetryOptions(task_retry_limit = 1)    
-            deferred.defer(update_wcl_raid_spec, s, d, active_raid, _retry_options=options)
+            deferred.defer(update_wcl_raid_spec, s, d, active_raid)
 
 def update_wcl_raid_update_subset(subset, active_raid=""):
     difficulties = ["Heroic"]
@@ -3899,14 +3841,12 @@ def update_wcl_raid_update_subset(subset, active_raid=""):
     
     for i, s in enumerate(subset):
         for d in difficulties:
-            options = TaskRetryOptions(task_retry_limit = 1)    
-            deferred.defer(update_wcl_raid_spec, s, d, active_raid, _retry_options=options)
+            deferred.defer(update_wcl_raid_spec, s, d, active_raid)
     
 # update all the wcl for dungeons
 def update_wcl_all():
     update_wcl_update()
-    options = TaskRetryOptions(task_retry_limit = 1)
-    deferred.defer(write_spec_overviews, _retry_options=options)
+    deferred.defer(write_spec_overviews)
 
 # update pvp ladder stats
 
@@ -3943,9 +3883,7 @@ def update_all_pvp_rankings():
     use_these_modes += ["all"]
     for region in ["us"]: # always us since we're using an internal api that aggregates for us
         for mode in use_these_modes:
-            options = TaskRetryOptions(task_retry_limit = 1)            
-            deferred.defer(update_pvp_rankings, region, mode,
-                           _retry_options=options)
+            deferred.defer(update_pvp_rankings, region, mode)
 
 ## handlers
 
@@ -3960,8 +3898,7 @@ class OnlyGenerateHTML(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing templates to cloud storage...")
-        options = TaskRetryOptions(task_retry_limit = 1)
-        deferred.defer(write_overviews, _retry_options=options)
+        deferred.defer(write_overviews)
 
 
 class TestView(webapp2.RequestHandler):
@@ -4063,8 +4000,7 @@ class WCLGenHTML(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing WCL HTML...\n")
-        options = TaskRetryOptions(task_retry_limit = 1)
-        deferred.defer(write_spec_overviews, _retry_options=options)
+        deferred.defer(write_spec_overviews)
 
 class WCLRaidGenHTML(webapp2.RequestHandler):
     def get(self):
@@ -4072,9 +4008,7 @@ class WCLRaidGenHTML(webapp2.RequestHandler):
         self.response.write("Writing WCL Raid HTML...\n")
         raids_to_generate = determine_raids_to_generate()
         for r in raids_to_generate:
-            options = TaskRetryOptions(task_retry_limit = 1)
-            deferred.defer(write_raid_spec_overviews, active_raid = r,
-                           _retry_options=options)
+            deferred.defer(write_raid_spec_overviews, active_raid = r)
 
 class WCLRaidGenHTMLAll(webapp2.RequestHandler):
     def get(self):
@@ -4082,72 +4016,61 @@ class WCLRaidGenHTMLAll(webapp2.RequestHandler):
         self.response.write("Writing WCL Raid HTML for all known raids...\n")
         raids_to_generate = known_raids
         for r in raids_to_generate:
-            options = TaskRetryOptions(task_retry_limit = 1)
-            deferred.defer(write_raid_spec_overviews, active_raid = r,
-                           _retry_options=options)            
+            deferred.defer(write_raid_spec_overviews, active_raid = r)
 
 class GenStaticHTML(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing Static HTML pages...\n")
-        options = TaskRetryOptions(task_retry_limit = 1)
-        deferred.defer(create_static_pages, _retry_options=options)
+        deferred.defer(create_static_pages)
 
 class GenMainHTML(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing Main HTML pages...\n")
-        options = TaskRetryOptions(task_retry_limit = 1)
-        deferred.defer(create_main_pages, _retry_options=options)
+        deferred.defer(create_main_pages)
 
 class GenPVP(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing PvP HTML pages...\n")
-        options = TaskRetryOptions(task_retry_limit = 1)
-        deferred.defer(create_pvp_pages, _retry_options=options)            
+        deferred.defer(create_pvp_pages)
 
 class GenAPIs(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing APIs...\n")
-        options = TaskRetryOptions(task_retry_limit = 1)
-        deferred.defer(write_apis, _retry_options=options)
+        deferred.defer(write_apis)
 
         
 class TestCloudflarePurgeCache(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Testing cloudflare purge cache...\n")
-        options = TaskRetryOptions(task_retry_limit = 1)
         self.response.write(cloudflare_purge_cache("mplus.subcreation.net", "index.html"))
 
 class TestResetDB(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Clearing db\n")
-        options = TaskRetryOptions(task_retry_limit = 1)
         self.response.write(reset_db())
 
 class TestResetFatedDB(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Clearing db for fated\n")
-        options = TaskRetryOptions(task_retry_limit = 1)
         self.response.write(reset_fated_db())
 
 class TestResetPrepatchDB(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Clearing db for prepatch\n")
-        options = TaskRetryOptions(task_retry_limit = 1)
         self.response.write(reset_prepatch_db())           
 
 class TestResetSpecRankingsRaid(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Clearing spec_rankings_raid\n")
-        options = TaskRetryOptions(task_retry_limit = 1)
         self.response.write(reset_spec_rankings_raid())           
 
 class APIDungeonEase(webapp2.RequestHandler):
