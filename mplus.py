@@ -3191,15 +3191,15 @@ def write_overviews():
     affixes_to_write += known_affixes()
 
     for af in affixes_to_write:
-        deferred.defer(render_and_write, af)
+        deferred.defer(render_and_write, af, _queue="render")
 
     for af in affixes_to_write:
-        deferred.defer(render_and_write_compositions, af)
+        deferred.defer(render_and_write_compositions, af, _queue="render")
 
     for af in affixes_to_write:
-        deferred.defer(render_and_write_stats, af)
+        deferred.defer(render_and_write_stats, af, _queue="render")
 
-    deferred.defer(write_apis)
+    deferred.defer(write_apis, _queue="render")
 
 
 def create_spec_overview(s, d="all"):
@@ -3210,7 +3210,7 @@ def create_spec_overview(s, d="all"):
     else:
         dungeon_slug = slugify.slugify(unicode(d))
         filename = "%s-%s.html" % (spec_slug, dungeon_slug)
-    deferred.defer(write_to_storage, filename, rendered)
+    deferred.defer(write_to_storage, filename, rendered, _queue="render")
 
 
 def create_pvp_pages():
@@ -3225,7 +3225,7 @@ def create_pvp_pages():
         if mode == "all":
             filename = "index.html"
 
-        deferred.defer(pvp_write_to_storage, filename, rendered)
+        deferred.defer(pvp_write_to_storage, filename, rendered, _queue="render")
 
     write_pvp_stats()
     write_pvp_apis()
@@ -3241,7 +3241,7 @@ def write_pvp_stats():
         rendered = render_pvp_stats(mode)
         filename = "pvp-stats-%s.html" % mode
 
-        deferred.defer(pvp_write_to_storage, filename, rendered)
+        deferred.defer(pvp_write_to_storage, filename, rendered, _queue="render")
     
 def write_pvp_apis():
     global pvp_modes
@@ -3252,7 +3252,7 @@ def write_pvp_apis():
     for mode in modes_to_generate:
         rendered = api_pvp_specs(mode)
         filename = mode
-        deferred.defer(write_api_json, "api/v0/pvp/" + filename, rendered)
+        deferred.defer(write_api_json, "api/v0/pvp/" + filename, rendered, _queue="render")
 
 
 def write_api_json(filename, rendered):
@@ -3266,7 +3266,7 @@ def create_main_pages():
 
     for (filename, render_function) in main_pages:
         rendered = render_function()
-        deferred.defer(main_write_to_storage, filename, rendered)
+        deferred.defer(main_write_to_storage, filename, rendered, _queue="render")
     
 def create_static_pages():
     static_pages = [["privacy.html", render_privacy],
@@ -3274,7 +3274,7 @@ def create_static_pages():
 
     for (filename, render_function) in static_pages:
         rendered = render_function()
-        deferred.defer(main_write_to_storage, filename, rendered)
+        deferred.defer(main_write_to_storage, filename, rendered, _queue="render")
     
 def create_raid_index(difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     rendered = render_raid_index(difficulty=difficulty, active_raid=active_raid)
@@ -3311,7 +3311,7 @@ def create_raid_index(difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     # make sure to include all in stats
     encounters_to_write += ["all"]
     for encounter in encounters_to_write:
-        deferred.defer(render_and_write_raid_stats, encounter, difficulty, active_raid=active_raid)
+        deferred.defer(render_and_write_raid_stats, encounter, difficulty, active_raid=active_raid, _queue="render")
     
 def create_raid_spec_overview(s, e="all", difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     spec_slug = slugify.slugify(unicode(s))
@@ -3337,10 +3337,10 @@ def create_raid_spec_overview(s, e="all", difficulty=MAX_RAID_DIFFICULTY, active
 
 def write_spec_overviews():
     for s in specs:
-        deferred.defer(create_spec_overview, s, "all")
+        deferred.defer(create_spec_overview, s, "all", _queue="render")
 
         for k, v in dungeon_encounters.iteritems():
-            deferred.defer(create_spec_overview, s, k)
+            deferred.defer(create_spec_overview, s, k, _queue="render")
 
 
 def write_api_dungeon_ease():
@@ -3368,13 +3368,13 @@ def write_api_affix_tier_list():
                           content_type="application/json")        
             
 def write_apis():
-    deferred.defer(write_api_dungeon_ease)
-    deferred.defer(write_api_dungeon_specs)
-    deferred.defer(write_api_affix_tier_list)
+    deferred.defer(write_api_dungeon_ease, _queue="render")
+    deferred.defer(write_api_dungeon_specs, _queue="render")
+    deferred.defer(write_api_affix_tier_list, _queue="render")
 
-    deferred.defer(process_dungeon_ease_tier_lists_for_all_known_affixes)
+    deferred.defer(process_dungeon_ease_tier_lists_for_all_known_affixes, _queue="render")
 
-    deferred.defer(write_api_dungeon_ease_overall)
+    deferred.defer(write_api_dungeon_ease_overall, _queue="render")
 
 
 def write_raid_spec_overviews(active_raid=""):
@@ -3387,15 +3387,15 @@ def write_raid_spec_overviews(active_raid=""):
         difficulties = ["Mythic", "Heroic"]
     
     for d in difficulties:
-        deferred.defer(create_raid_index, d, active_raid=active_raid)
+        deferred.defer(create_raid_index, d, active_raid=active_raid, _queue="render")
 
     for s in specs:
         for d in difficulties:
-            deferred.defer(create_raid_spec_overview, s, "all", d, active_raid=active_raid)
+            deferred.defer(create_raid_spec_overview, s, "all", d, active_raid=active_raid, _queue="render")
 
             raid_encounters = get_raid_encounters(active_raid)
             for k, v in raid_encounters.iteritems():
-                deferred.defer(create_raid_spec_overview, s, k, d, active_raid=active_raid)
+                deferred.defer(create_raid_spec_overview, s, k, d, active_raid=active_raid, _queue="render")
 
 
 ## end cloud storage
@@ -3898,7 +3898,7 @@ class OnlyGenerateHTML(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing templates to cloud storage...")
-        deferred.defer(write_overviews)
+        deferred.defer(write_overviews, _queue="render")
 
 
 class TestView(webapp2.RequestHandler):
@@ -4000,7 +4000,7 @@ class WCLGenHTML(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing WCL HTML...\n")
-        deferred.defer(write_spec_overviews)
+        deferred.defer(write_spec_overviews, _queue="render")
 
 class WCLRaidGenHTML(webapp2.RequestHandler):
     def get(self):
@@ -4008,7 +4008,7 @@ class WCLRaidGenHTML(webapp2.RequestHandler):
         self.response.write("Writing WCL Raid HTML...\n")
         raids_to_generate = determine_raids_to_generate()
         for r in raids_to_generate:
-            deferred.defer(write_raid_spec_overviews, active_raid = r)
+            deferred.defer(write_raid_spec_overviews, active_raid = r, _queue="render")
 
 class WCLRaidGenHTMLAll(webapp2.RequestHandler):
     def get(self):
@@ -4016,31 +4016,31 @@ class WCLRaidGenHTMLAll(webapp2.RequestHandler):
         self.response.write("Writing WCL Raid HTML for all known raids...\n")
         raids_to_generate = known_raids
         for r in raids_to_generate:
-            deferred.defer(write_raid_spec_overviews, active_raid = r)
+            deferred.defer(write_raid_spec_overviews, active_raid = r, _queue="render")
 
 class GenStaticHTML(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing Static HTML pages...\n")
-        deferred.defer(create_static_pages)
+        deferred.defer(create_static_pages, _queue="render")
 
 class GenMainHTML(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing Main HTML pages...\n")
-        deferred.defer(create_main_pages)
+        deferred.defer(create_main_pages, _queue="render")
 
 class GenPVP(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing PvP HTML pages...\n")
-        deferred.defer(create_pvp_pages)
+        deferred.defer(create_pvp_pages, _queue="render")
 
 class GenAPIs(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
         self.response.write("Writing APIs...\n")
-        deferred.defer(write_apis)
+        deferred.defer(write_apis, _queue="render")
 
         
 class TestCloudflarePurgeCache(webapp2.RequestHandler):
