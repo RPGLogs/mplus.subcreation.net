@@ -3143,6 +3143,7 @@ def raid_write_to_storage(filename, content):
 
 
 def render_and_write(af):
+    logging.info("rendering affixes %s" % af)
     rendered = render_affixes(af)
     
     filename_slug = slugify.slugify(unicode(af))
@@ -3155,6 +3156,7 @@ def render_and_write(af):
     write_to_storage(filename_slug + ".html", rendered)
 
 def render_and_write_compositions(af):
+    logging.info("rendering compositions %s" % af)
     rendered = render_compositions(af)
     
     filename_slug = slugify.slugify(unicode(af))
@@ -3165,6 +3167,7 @@ def render_and_write_compositions(af):
 
 
 def render_and_write_stats(af):
+    logging.info("rendering stats %s" % af)    
     rendered = render_stats(af)
     
     filename_slug = slugify.slugify(unicode(af))
@@ -3172,6 +3175,8 @@ def render_and_write_stats(af):
     write_to_storage("stats-" + filename_slug + ".html", rendered)
 
 def render_and_write_raid_stats(encounter, difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
+    logging.info("rendering raid stats %s %s %s" % (encounter, difficulty, active_raid))    
+    
     rendered = render_raid_stats(encounter, difficulty, active_raid=active_raid)
 
     filename_slug = ""
@@ -3203,6 +3208,7 @@ def write_overviews():
 
 
 def create_spec_overview(s, d="all"):
+    logging.info("creating spec overview %s %s" % (s, d))
     spec_slug = slugify.slugify(unicode(s))
     rendered = render_wcl_spec(s, dungeon=d)
     if d == "all":
@@ -3220,6 +3226,7 @@ def create_pvp_pages():
     modes_to_generate += pvp_modes
     
     for mode in modes_to_generate:
+        logging.info("creating pvp page %s" % mode)        
         rendered = render_pvp_index(mode)
         filename = "%s.html" % mode
         if mode == "all":
@@ -3238,6 +3245,7 @@ def write_pvp_stats():
     modes_to_generate += pvp_modes
     
     for mode in modes_to_generate:
+        logging.info("creating pvp stats %s" % mode)                
         rendered = render_pvp_stats(mode)
         filename = "pvp-stats-%s.html" % mode
 
@@ -3250,6 +3258,7 @@ def write_pvp_apis():
     modes_to_generate += pvp_modes
     
     for mode in modes_to_generate:
+        logging.info("creating pvp api %s" % mode)        
         rendered = api_pvp_specs(mode)
         filename = mode
         write_api_json("api/v0/pvp/" + filename, rendered)
@@ -3265,6 +3274,7 @@ def create_main_pages():
     main_pages = [["index.html", render_main_index]]
 
     for (filename, render_function) in main_pages:
+        logging.info("creating main page %s" % filename)        
         rendered = render_function()
         main_write_to_storage(filename, rendered)
     
@@ -3273,10 +3283,12 @@ def create_static_pages():
                     ["faq.html", render_faq]]
 
     for (filename, render_function) in static_pages:
+        logging.info("creating static page %s" % filename)        
         rendered = render_function()
         main_write_to_storage(filename, rendered)
     
 def create_raid_index(difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
+    logging.info("creating raid index %s %s" % (difficulty, active_raid))
     rendered = render_raid_index(difficulty=difficulty, active_raid=active_raid)
     filename = active_raid + ".html"
     if difficulty == "Heroic":
@@ -3298,6 +3310,7 @@ def create_raid_index(difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     encounters_to_write += raid_canonical_order
 
     for encounter in encounters_to_write:
+        logging.info("creating raid encounter %s %s %s" % (encounter, difficulty, active_raid))
         rendered = render_raid_index(encounter, difficulty, active_raid=active_raid)
         filename = ""
         if active_raid != "nathria": # nathria doesn't prefix, other raids do
@@ -3311,10 +3324,12 @@ def create_raid_index(difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     # make sure to include all in stats
     encounters_to_write += ["all"]
     for encounter in encounters_to_write:
+        logging.info("creating raid encounter stats %s %s %s" % (encounter, difficulty, active_raid))
         deferred.defer(render_and_write_raid_stats, encounter, difficulty, active_raid=active_raid, _queue="render")
     
 def create_raid_spec_overview(s, e="all", difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     spec_slug = slugify.slugify(unicode(s))
+    logging.info("creating raid spec overview %s %s %s %s" % (s, encounter, difficulty, active_raid))
     rendered = render_wcl_raid_spec(s, encounter=e, difficulty=difficulty, active_raid=active_raid)
     filename_slug = ""
     if active_raid != "nathria":
@@ -3337,6 +3352,7 @@ def create_raid_spec_overview(s, e="all", difficulty=MAX_RAID_DIFFICULTY, active
 
 def write_spec_overviews():
     for s in specs:
+        logging.info("creating spec overview %s %s %s %s" % s)
         deferred.defer(create_spec_overview, s, "all", _queue="render")
 
         for k, v in dungeon_encounters.iteritems():
