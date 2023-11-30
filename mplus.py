@@ -3329,7 +3329,7 @@ def create_raid_index(difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     
 def create_raid_spec_overview(s, e="all", difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     spec_slug = slugify.slugify(unicode(s))
-    logging.info("creating raid spec overview %s %s %s %s" % (s, encounter, difficulty, active_raid))
+    logging.info("creating raid spec overview %s %s %s %s" % (s, e, difficulty, active_raid))
     rendered = render_wcl_raid_spec(s, encounter=e, difficulty=difficulty, active_raid=active_raid)
     filename_slug = ""
     if active_raid != "nathria":
