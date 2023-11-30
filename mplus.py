@@ -3210,7 +3210,7 @@ def create_spec_overview(s, d="all"):
     else:
         dungeon_slug = slugify.slugify(unicode(d))
         filename = "%s-%s.html" % (spec_slug, dungeon_slug)
-    deferred.defer(write_to_storage, filename, rendered, _queue="render")
+    write_to_storage(filename, rendered)
 
 
 def create_pvp_pages():
@@ -3225,7 +3225,7 @@ def create_pvp_pages():
         if mode == "all":
             filename = "index.html"
 
-        deferred.defer(pvp_write_to_storage, filename, rendered, _queue="render")
+        pvp_write_to_storage(filename, rendered)
 
     write_pvp_stats()
     write_pvp_apis()
@@ -3241,7 +3241,7 @@ def write_pvp_stats():
         rendered = render_pvp_stats(mode)
         filename = "pvp-stats-%s.html" % mode
 
-        deferred.defer(pvp_write_to_storage, filename, rendered, _queue="render")
+        pvp_write_to_storage(filename, rendered)
     
 def write_pvp_apis():
     global pvp_modes
@@ -3252,7 +3252,7 @@ def write_pvp_apis():
     for mode in modes_to_generate:
         rendered = api_pvp_specs(mode)
         filename = mode
-        deferred.defer(write_api_json, "api/v0/pvp/" + filename, rendered, _queue="render")
+        write_api_json("api/v0/pvp/" + filename, rendered)
 
 
 def write_api_json(filename, rendered):
@@ -3266,7 +3266,7 @@ def create_main_pages():
 
     for (filename, render_function) in main_pages:
         rendered = render_function()
-        deferred.defer(main_write_to_storage, filename, rendered, _queue="render")
+        main_write_to_storage(filename, rendered)
     
 def create_static_pages():
     static_pages = [["privacy.html", render_privacy],
@@ -3274,7 +3274,7 @@ def create_static_pages():
 
     for (filename, render_function) in static_pages:
         rendered = render_function()
-        deferred.defer(main_write_to_storage, filename, rendered, _queue="render")
+        main_write_to_storage(filename, rendered)
     
 def create_raid_index(difficulty=MAX_RAID_DIFFICULTY, active_raid=""):
     rendered = render_raid_index(difficulty=difficulty, active_raid=active_raid)
