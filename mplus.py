@@ -3352,7 +3352,7 @@ def create_raid_spec_overview(s, e="all", difficulty=MAX_RAID_DIFFICULTY, active
 
 def write_spec_overviews():
     for s in specs:
-        logging.info("creating spec overview %s %s %s %s" % s)
+        logging.info("creating spec overview %s" % s)
         deferred.defer(create_spec_overview, s, "all", _queue="render")
 
         for k, v in dungeon_encounters.iteritems():
