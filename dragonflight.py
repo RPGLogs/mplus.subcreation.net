@@ -5,7 +5,7 @@ dungeons = ["Atal'Dazar",
             "DOTI: Galakrond's Fall",
             "DOTI: Murozond's Rise",
             "Darkheart Thicket",
-            "Everbloom",
+            "The Everbloom",
             "Throne of the Tides",
             "Waycrest Manor"]            
 
