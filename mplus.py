@@ -199,6 +199,9 @@ def update_dungeon_affix_region(dungeon, affixes, region, season=RIO_SEASON, pag
     
     affixes_slug = slugify.slugify(unicode(affixes))
 
+    # everbloom handling
+    if dungeon_slug == "the-everbloom":
+        dungeon_slug = "everbloom"
 
     req_url = "https://raider.io/api/v1/mythic-plus/runs?"
     req_url += "season=%s&region=%s&affixes=%s&dungeon=%s&page=%d" \
