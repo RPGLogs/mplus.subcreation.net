@@ -4,7 +4,7 @@ dungeon_encounters["Black Rook Hold"] = 61501
 dungeon_encounters["Darkheart Thicket"] = 61466
 dungeon_encounters["DOTI: Galakrond's Fall"] = 12579
 dungeon_encounters["DOTI: Murozond's Rise"] = 12580
-dungeon_encounters["Everbloom"] = 61279
+dungeon_encounters["The Everbloom"] = 61279
 dungeon_encounters["Throne of the Tides"] = 10643
 dungeon_encounters["Waycrest Manor"] = 61862
 
