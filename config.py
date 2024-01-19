@@ -14,7 +14,7 @@ RIO_SEASON = "season-df-3"
 WCL_SEASON = 1
 
 # used for raid
-WCL_PARTITION = 1
+WCL_PARTITION = 2
 
 # config
 RAID_NAME = "Amirdrassil, the Dream's Hope"
