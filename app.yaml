@@ -4,7 +4,7 @@ threadsafe: true
 instance_class: F4_HIGHMEM
 automatic_scaling:
   min_instances: 0
-  max_instances: 1
+  max_instances: 10
   max_pending_latency: 15s
   target_cpu_utilization: 0.95
   target_throughput_utilization: 0.95
